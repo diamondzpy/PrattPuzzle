@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+
+# C++ build output
+engine/build/
+*.o
+*.obj
+*.out
+*.exe
+
+# Node (later when you create web/)
+web/node_modules/
+web/.next/
+web/.env
