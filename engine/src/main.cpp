@@ -23,7 +23,6 @@ static std::vector<char> parsePrecList(const std::string& s) {
 }
 
 static std::unordered_map<char,int> buildPrecMap(const std::vector<char>& orderHighToLow) {
-  // higher number => tighter binding
   std::unordered_map<char,int> m;
   int bp = 40;
   for (char c : orderHighToLow) {
@@ -35,8 +34,6 @@ static std::unordered_map<char,int> buildPrecMap(const std::vector<char>& orderH
 }
 
 static void validateExprMVP(const std::string& expr) {
-  // MVP restriction: only digits, spaces, + - * /
-  // (we tokenize parentheses but don't allow them in MVP)
   for (char c : expr) {
     if (std::isdigit((unsigned char)c) || std::isspace((unsigned char)c)) continue;
     if (c=='+' || c=='-' || c=='*' || c=='/') continue;
