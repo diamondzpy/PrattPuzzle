@@ -6,7 +6,39 @@
 
 # C++ build
 engine/build/
+engine/**/build/
 *.o
 *.obj
 *.out
 *.exe
+*.a
+*.lib
+*.so
+*.dylib
+
+# web
+web/node_modules/
+web/.next/
+web/out/
+web/.turbo/
+web/.vercel/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# prisma/SQLite
+web/dev.db
+web/prisma/dev.db
+web/prisma/*.db
+web/prisma/*.db-journal
+web/prisma/*.db-wal
+web/prisma/*.db-shm
