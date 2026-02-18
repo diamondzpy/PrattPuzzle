@@ -66,7 +66,7 @@ export function PuzzleSelectScreen() {
     <main className="screen panel-screen">
       <BackButton fallbackTo="/" useHistory={false} />
 
-      <section className="panel">
+      <section className="panel puzzle-select-panel">
         <h1>Select Puzzle</h1>
         {error && <p className="error-message">{error}</p>}
 

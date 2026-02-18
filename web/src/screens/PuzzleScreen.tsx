@@ -22,7 +22,7 @@ import type { PuzzleDetail } from "../lib/types";
 
 function prettifyOperator(op: string): string {
   if (op === "*") {
-    return "x";
+    return "×";
   }
   if (op === "/") {
     return "÷";
@@ -32,7 +32,7 @@ function prettifyOperator(op: string): string {
 
 function prettifyExpression(expression: string): string {
   return expression
-    .replaceAll("*", " x ")
+    .replaceAll("*", " × ")
     .replaceAll("/", " ÷ ")
     .replaceAll("+", " + ")
     .replaceAll("-", " - ")
