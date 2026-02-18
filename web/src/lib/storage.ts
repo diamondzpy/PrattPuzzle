@@ -1,4 +1,5 @@
-const SOLVED_KEY = "pratt-puzzle-solved-v2";
+// Bump this when puzzle content is replaced so old solved state does not leak.
+const SOLVED_KEY = "pratt-puzzle-solved-v3-batch2";
 
 type SolvedMap = Record<string, true>;
 
