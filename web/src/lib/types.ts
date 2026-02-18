@@ -8,4 +8,5 @@ export type PuzzleDetail = {
   title: string;
   expression: string;
   target: string;
+  defaultOrder: string[];
 };

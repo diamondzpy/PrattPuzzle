@@ -101,6 +101,7 @@ export function PuzzleScreen() {
         const data = await fetchPuzzleDetail(puzzleId);
         if (!cancelled) {
           setPuzzle(data);
+          setOrder(data.defaultOrder);
         }
       } catch (err) {
         if (!cancelled) {
@@ -133,7 +134,7 @@ export function PuzzleScreen() {
     if (puzzle) {
       void recompute(order);
     }
-  }, [puzzle]);
+  }, [puzzle, order]);
 
   const solved = useMemo(() => {
     return Boolean(puzzle) && result === puzzle.target;
@@ -191,7 +192,6 @@ export function PuzzleScreen() {
                   const newIndex = order.indexOf(String(over.id));
                   const next = arrayMove(order, oldIndex, newIndex);
                   setOrder(next);
-                  void recompute(next);
                 }}
               >
                 <SortableContext

@@ -9,9 +9,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const webDir = path.resolve(__dirname, "..");
 const engineExe = path.resolve(webDir, "..", "engine", "build", "pratt_eval");
-const DEFAULT_ORDER = "/,*,+,-";
-const FALLBACK_ORDERS = ["*,/,+,-", "+,-,*,/", "-,+,/,*", "-,*,+,/"];
-const playableCache = new Map<number, { expression: string; target: string }>();
 type EngineResult = { ok: true; value: string } | { ok: false; error: string };
 
 const app = express();
@@ -30,6 +27,11 @@ function validOrder(order: unknown): order is string[] {
   );
 }
 
+function parseOrderCsv(orderCsv: string): string[] | null {
+  const parts = orderCsv.split(",").map((part) => part.trim());
+  return validOrder(parts) ? parts : null;
+}
+
 function runEngineSafe(expression: string, orderCsv: string): EngineResult {
   const run = spawnSync(engineExe, [expression, orderCsv], { encoding: "utf-8" });
   if (run.error) {
@@ -44,55 +46,8 @@ function runEngineSafe(expression: string, orderCsv: string): EngineResult {
   return { ok: true, value: (run.stdout || "").trim() };
 }
 
-function generateVariantExpression(id: number, salt: number): string {
-  const a = 2 + ((id + salt) % 8);
-  const b = 3 + ((id * 2 + salt) % 8);
-  const c = 4 + ((id * 3 + salt) % 8);
-  const d = 2 + ((id * 5 + salt) % 8);
-  const e = 1 + ((id * 7 + salt) % 8);
-  return `${a}+${b}*${c}/${d}-${e}`;
-}
-
-function resolvePlayablePuzzle(puzzleId: number): { expression: string; target: string } {
-  const cached = playableCache.get(puzzleId);
-  if (cached) {
-    return cached;
-  }
-
-  const puzzle = PUZZLES.find((row) => row.id === puzzleId);
-  if (!puzzle) {
-    throw new Error("Puzzle not found");
-  }
-
-  const candidateOrders = [puzzle.solutionOrder, ...FALLBACK_ORDERS]
-    .filter((order, index, arr) => arr.indexOf(order) === index)
-    .filter((order) => order !== DEFAULT_ORDER);
-
-  for (let attempt = 0; attempt < 32; attempt += 1) {
-    const expression =
-      attempt === 0
-        ? puzzle.expression
-        : generateVariantExpression(puzzle.id, attempt);
-
-    const defaultResult = runEngineSafe(expression, DEFAULT_ORDER);
-    if (!defaultResult.ok) {
-      continue;
-    }
-
-    for (const order of candidateOrders) {
-      const candidateTarget = runEngineSafe(expression, order);
-      if (!candidateTarget.ok) {
-        continue;
-      }
-      if (candidateTarget.value !== defaultResult.value) {
-        const resolved = { expression, target: candidateTarget.value };
-        playableCache.set(puzzleId, resolved);
-        return resolved;
-      }
-    }
-  }
-
-  throw new Error("Unable to generate puzzle with non-default solution.");
+function getPuzzleOrNull(id: number) {
+  return PUZZLES.find((row) => row.id === id) ?? null;
 }
 
 app.get("/api/puzzles", (_req, res) => {
@@ -111,23 +66,30 @@ app.get("/api/puzzles/:id", (req, res) => {
     return;
   }
 
-  const puzzle = PUZZLES.find((row) => row.id === id);
+  const puzzle = getPuzzleOrNull(id);
   if (!puzzle) {
     res.status(404).send("Puzzle not found");
     return;
   }
 
-  try {
-    const playable = resolvePlayablePuzzle(puzzle.id);
-    res.json({
-      id: puzzle.id,
-      title: puzzle.title,
-      expression: playable.expression,
-      target: playable.target
-    });
-  } catch (error) {
-    res.status(500).send(error instanceof Error ? error.message : String(error));
+  const target = runEngineSafe(puzzle.expression, puzzle.solutionOrder);
+  if (!target.ok) {
+    res.status(500).send(`Puzzle config error: ${target.error}`);
+    return;
   }
+  const defaultOrder = parseOrderCsv(puzzle.defaultOrder);
+  if (!defaultOrder) {
+    res.status(500).send("Puzzle config error: invalid defaultOrder");
+    return;
+  }
+
+  res.json({
+    id: puzzle.id,
+    title: puzzle.title,
+    expression: puzzle.expression,
+    target: target.value,
+    defaultOrder
+  });
 });
 
 app.post("/api/eval", (req, res) => {
@@ -143,23 +105,18 @@ app.post("/api/eval", (req, res) => {
     return;
   }
 
-  const puzzle = PUZZLES.find((row) => row.id === puzzleId);
+  const puzzle = getPuzzleOrNull(puzzleId);
   if (!puzzle) {
     res.status(404).send("Puzzle not found");
     return;
   }
 
-  try {
-    const playable = resolvePlayablePuzzle(puzzle.id);
-    const result = runEngineSafe(playable.expression, order.join(","));
-    if (!result.ok) {
-      res.json({ result: "Error" });
-      return;
-    }
-    res.json({ result: result.value });
-  } catch (error) {
-    res.status(500).send(error instanceof Error ? error.message : String(error));
+  const result = runEngineSafe(puzzle.expression, order.join(","));
+  if (!result.ok) {
+    res.json({ result: "Error" });
+    return;
   }
+  res.json({ result: result.value });
 });
 
 if (process.env.NODE_ENV === "production") {
