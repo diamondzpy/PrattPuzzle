@@ -16,6 +16,11 @@ engine/**/build/
 *.so
 *.dylib
 
+# Web build
+web/node_modules/
+web/dist/
+web/dist-server/
+
 # Logs
 *.log
 npm-debug.log*
