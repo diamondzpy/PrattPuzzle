@@ -16,13 +16,6 @@ engine/**/build/
 *.so
 *.dylib
 
-# web
-web/node_modules/
-web/.next/
-web/out/
-web/.turbo/
-web/.vercel/
-
 # Logs
 *.log
 npm-debug.log*
@@ -34,11 +27,3 @@ pnpm-debug.log*
 .env
 .env.*
 !.env.example
-
-# prisma/SQLite
-web/dev.db
-web/prisma/dev.db
-web/prisma/*.db
-web/prisma/*.db-journal
-web/prisma/*.db-wal
-web/prisma/*.db-shm

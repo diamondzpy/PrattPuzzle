@@ -1,9 +1,0 @@
--- CreateTable
-CREATE TABLE "Puzzle" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "title" TEXT NOT NULL,
-    "expr" TEXT NOT NULL,
-    "targetNum" INTEGER NOT NULL,
-    "targetDen" INTEGER NOT NULL DEFAULT 1,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
