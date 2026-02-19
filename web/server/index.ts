@@ -7,7 +7,7 @@ import { PUZZLES } from "./puzzles.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const webDir = path.resolve(__dirname, "..");
+const webDir = path.resolve(__dirname, "..", "..");
 const engineExe = path.resolve(webDir, "..", "engine", "build", "pratt_eval");
 type EngineResult = { ok: true; value: string } | { ok: false; error: string };
 
