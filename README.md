@@ -25,9 +25,9 @@ https://prattpuzzle.onrender.com/
 ## Screenshots
 
 ```md
-![Home](screenshots/home.png)
-![Puzzle Select](screenshots/puzzle_select.png)
-![Puzzle Screen](screenshots/puzzle.png)
+![Home](<screenshots/home.png>)
+![Puzzle Select](<screenshots/puzzle_select.png>)
+![Puzzle Screen](<screenshots/puzzle.png>)
 ```
 
 ## Install
@@ -60,7 +60,7 @@ Open `http://localhost:5173`.
 ## Project Structure
 
 ```text
-engine/        C++ expression engine
+engine/        C++ parsing/evaluation engine
 web/src/       React frontend
 web/server/    API server + puzzle data
 ```
