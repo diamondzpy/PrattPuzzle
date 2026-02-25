@@ -24,8 +24,6 @@ https://prattpuzzle.onrender.com/
 
 ## Screenshots
 
-Add your images here:
-
 ```md
 ![Home](screenshots/home.png)
 ![Puzzle Select](screenshots/puzzle_select.png)
