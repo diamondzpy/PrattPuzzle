@@ -123,7 +123,7 @@ app.post("/api/eval", (req, res) => {
 if (process.env.NODE_ENV === "production") {
   const distPath = path.resolve(webDir, "dist");
   app.use(express.static(distPath));
-  app.get("*splat", (_req, res) => {
+  app.get("/{*splat}", (_req, res) => {
     res.sendFile(path.join(distPath, "index.html"));
   });
 }

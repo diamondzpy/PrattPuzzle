@@ -4,7 +4,7 @@ PrattPuzzle is a puzzle game where you solve arithmetic expressions by changing 
 
 ## Live demo
 
-https://prattpuzzle.onrender.com/
+The live project demo is available at https://prattpuzzle.onrender.com/
 
 ## Overview
 
@@ -24,11 +24,9 @@ https://prattpuzzle.onrender.com/
 
 ## Screenshots
 
-```md
-![Home](<screenshots/home.png>)
-![Puzzle Select](<screenshots/puzzle_select.png>)
-![Puzzle Screen](<screenshots/puzzle.png>)
-```
+![Home](screenshots/home.png)
+![Puzzle Select](screenshots/puzzle_select.png)
+![Puzzle Screen](screenshots/puzzle.png)
 
 ## Install
 

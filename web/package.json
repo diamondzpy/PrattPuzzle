@@ -10,7 +10,7 @@
     "build": "npm run build:web && npm run build:api",
     "build:web": "vite build",
     "build:api": "tsc -p tsconfig.server.json",
-    "start": "node dist-server/index.js"
+    "start": "node dist-server/server/index.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
